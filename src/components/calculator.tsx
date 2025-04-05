@@ -3,19 +3,36 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
 export function Calculator() { 
-  const [display, setDisplay] = useState('0'); 
-  const [expression, setExpression] = useState(''); 
-  const [resetDisplay, setResetDisplay] = useState(false); 
+  const [expression, setExpression] = useState('0');
+  const [resetExpression, setResetExpression] = useState(false);
 
-  
+  const handleClear = () => {
+    setExpression('0');
+    setResetExpression(false); 
+  }
 
+  const handleDigit = (digit : string) => { 
+    // when we have an answer displayed then press a digit, we reset the expression with the digit 
+    if (resetExpression) { 
+      setExpression(digit); 
+      setResetExpression(false);
+    } else { 
+      setExpression(expression === '0' ? digit : expression + digit)
+    }
+    // else we append digit to expression 
+  }
 
+  const handleOperator = (operator : string) => { 
+    // if we have an expression, we append the operator to the expression 
+
+    
+  }
 
 
   return (
     <div className="w-96 border rounded-xl bg-muted shadow-xl p-4"> 
-      <div className="bg-white dark:bg-slate-700 p-3 mb-4 rounded-md text-right text-2xl h-16 flex items-center justify-end border">
-        {display}
+      <div className="bg-white dark:bg-slate-700 p-3 mb-4 rounded-md text-right text-2xl h-16 flex flex-col items-end justify-center border">
+          {expression}
       </div>
       
       <div className="grid grid-cols-4 gap-2.5"> 
@@ -71,6 +88,5 @@ export function Calculator() {
 
       </div> 
     </div> 
-
   )
 }
