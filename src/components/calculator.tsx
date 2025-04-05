@@ -4,11 +4,12 @@ import { useState } from "react"
 
 export function Calculator() { 
   const [display, setDisplay] = useState('0'); 
-  const [firstNumber, setFirstNumber] = useState<number | null>(null); 
-  const [operator, setOperator] = useState<string | null>(null); 
-  const [waitingForSecondNumber, setWaitingForSecondNumber] = useState(false); 
+  const [expression, setExpression] = useState(''); 
+  const [resetDisplay, setResetDisplay] = useState(false); 
 
   
+
+
 
 
   return (
