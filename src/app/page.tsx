@@ -7,6 +7,7 @@ export default function Home() {
         <ModeToggle />
       </div>
       <h1 className="text-3xl font-bold mb-8">Ezra's Calculator</h1>
+      
       <Calculator /> 
 
     </main>
