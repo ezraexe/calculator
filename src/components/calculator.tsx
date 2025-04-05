@@ -9,7 +9,7 @@ export function Calculator() {
   const handleClear = () => {
     setExpression('0');
     setResetExpression(false); 
-  }
+  };
 
   const handleDigit = (digit : string) => { 
     // when we have an answer displayed then press a digit, we reset the expression with the digit 
@@ -20,7 +20,7 @@ export function Calculator() {
       setExpression(expression === '0' ? digit : expression + digit)
     }
     // else we append digit to expression 
-  }
+  };
 
   const handleOperator = (operator : string) => { 
     // if we have an expression, we append the operator to the expression 
@@ -33,7 +33,7 @@ export function Calculator() {
     } else { 
       setExpression(expression + ' ' + operator + ' ' )
     }
-  }
+  };
 
   const handleDecimal = () => { 
     if (resetExpression) { 
@@ -48,11 +48,48 @@ export function Calculator() {
     if (!lastPart.includes('.')) { 
       setExpression(expression + '.')
     }
-  }
+  };
 
   const handleEquals = () => { 
-    
-  }
+    try { 
+      let evalExpression = expression.replace(/×/g, '*').replace(/÷/g, '/');
+      const result = eval(evalExpression); 
+      setExpression(result.toString()); 
+      setResetExpression(true); 
+    } catch (error) { 
+      setExpression('Error'); 
+      setResetExpression(true); 
+    }
+  };
+
+  const handleParentheses = (parenthesis : string) => {
+    // when we have an answer displayed then press a parenthesis, we reset the expression with the parenthesis 
+    if (resetExpression) { 
+      setExpression(parenthesis); 
+      setResetExpression(false);
+    } else { 
+      setExpression(expression === '0' ? parenthesis : expression + parenthesis); 
+    }
+  };
+
+  const handlePercentage = () => { 
+    try { 
+      const parts = expression.split(' '); 
+      const lastPart = parts[parts.length - 1]; 
+
+      if (!isNaN(parseFloat(lastPart))) { 
+        const percentValue = parseFloat(lastPart) / 100; 
+        parts[parts.length - 1] = percentValue.toString(); 
+        setExpression(parts.join(' '));
+      }
+    } catch (error) { 
+      setExpression('Error'); 
+      setResetExpression(true); 
+    }
+  };
+
+  // const handleBackspace = () => {
+  // }
 
 
   return (
