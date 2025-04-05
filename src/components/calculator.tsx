@@ -28,7 +28,7 @@ export function Calculator() {
     // for edge case where we have an answer displayed then press an operator, we reset the expression with the operator 
     setResetExpression(false); 
 
-    if (['+', '-', 'x', '+'].some(op => expression.endsWith(' ' + op + ' '))) {
+    if (['+', '-', '×', '÷'].some(op => expression.endsWith(' ' + op + ' '))) {
       setExpression(expression.slice(0, -3) + ' ' + operator + ' '); 
     } else { 
       setExpression(expression + ' ' + operator + ' ' )
@@ -100,54 +100,169 @@ export function Calculator() {
       
       <div className="grid grid-cols-4 gap-2.5"> 
         {/* First Row */}
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleParentheses('(')}
+        >
           (
         </Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">
+        
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleParentheses(')')}
+        >
           )
         </Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={handlePercentage}
+        >
           %
         </Button>
-        <Button variant="destructive" className="border cursor-pointer hover:bg-red-500 transition-all duration-300">
+
+        <Button 
+          variant="destructive" 
+          className="border cursor-pointer hover:bg-red-500 transition-all duration-300" 
+          onClick={handleClear}
+        >
           AC
         </Button>
 
         {/* Second Row */}
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleDigit('7')}
+        >
           7
         </Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleDigit('8')}
+        >
           8
         </Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleDigit('9')}
+        >
           9
         </Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">÷</Button>
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleOperator('÷')}
+        > 
+          ÷ 
+        </Button>
 
         {/* Third Row */}
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleDigit('4')}
+        >
           4
         </Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleDigit('5')}
+        >
           5
         </Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleDigit('6')}
+        >
           6
         </Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">×</Button>
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleOperator('×')}
+        > 
+          × 
+        </Button>
 
         {/* Fourth Row */}
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">1</Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">2</Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">3</Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">-</Button>
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleDigit('1')}
+        >
+          1
+        </Button> 
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleDigit('2')}
+        >
+          2
+        </Button>
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleDigit('3')}
+        >
+          3
+        </Button>
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleOperator('-')}
+        > 
+          - 
+        </Button>
 
         {/* Fifth Row */}
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">0</Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">.</Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">=</Button>
-        <Button variant="secondary" className="border cursor-pointer hover:bg-gray-200 transition-all duration-300">+</Button>
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleDigit('0')}
+        >
+          0
+        </Button>
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={handleDecimal}
+        >
+          .
+        </Button>
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={handleEquals}
+        > 
+          = 
+        </Button>
+
+        <Button 
+          variant="secondary" 
+          className="border cursor-pointer hover:bg-gray-200 transition-all duration-300" 
+          onClick={() => handleOperator('+')}
+        > 
+          + 
+        </Button>
 
       </div> 
     </div> 
