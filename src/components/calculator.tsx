@@ -25,6 +25,32 @@ export function Calculator() {
   const handleOperator = (operator : string) => { 
     // if we have an expression, we append the operator to the expression 
 
+    // for edge case where we have an answer displayed then press an operator, we reset the expression with the operator 
+    setResetExpression(false); 
+
+    if (['+', '-', 'x', '+'].some(op => expression.endsWith(' ' + op + ' '))) {
+      setExpression(expression.slice(0, -3) + ' ' + operator + ' '); 
+    } else { 
+      setExpression(expression + ' ' + operator + ' ' )
+    }
+  }
+
+  const handleDecimal = () => { 
+    if (resetExpression) { 
+      setExpression('0.'); 
+      setResetExpression(false); 
+      return;
+    }
+    
+    const parts = expression.split(' ');
+    const lastPart = parts[parts.length - 1]; 
+
+    if (!lastPart.includes('.')) { 
+      setExpression(expression + '.')
+    }
+  }
+
+  const handleEquals = () => { 
     
   }
 
