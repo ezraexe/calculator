@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useState, useEffect } from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
@@ -13,16 +14,25 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function ModeToggle() {
+  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
+  
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" className="relative">
-          {theme !== "dark" ? (
-            <Sun className="h-[1.2rem] w-[1.2rem]" />
+          {mounted ? (
+            theme !== "dark" ? (
+              <Sun className="h-[1.2rem] w-[1.2rem]" />
+            ) : (
+              <Moon className="h-[1.2rem] w-[1.2rem]" />
+            )
           ) : (
-            <Moon className="h-[1.2rem] w-[1.2rem]" />
+            <div className="h-[1.2rem] w-[1.2rem]" />
           )}
           <span className="sr-only">Toggle theme</span>
         </Button>
