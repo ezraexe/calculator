@@ -1,6 +1,7 @@
 'use client' 
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { evaluate } from "mathjs"
 
 export function Calculator() { 
   const [expression, setExpression] = useState('0');
@@ -51,14 +52,25 @@ export function Calculator() {
   };
 
   const handleEquals = () => { 
-    try { 
+    try {
+      // Check if the expression contains any operators
+      const hasOperation = /[+\-×÷]/.test(expression);
+      
+      if (!hasOperation) {
+        // If it's just a number, keep it as is
+        return;
+      }
+      
+      // Replace your symbols with ones mathjs understands
       let evalExpression = expression.replace(/×/g, '*').replace(/÷/g, '/');
-      const result = eval(evalExpression); 
-      setExpression(result.toString()); 
-      setResetExpression(true); 
-    } catch (error) { 
-      setExpression('Error'); 
-      setResetExpression(true); 
+      
+      // Use mathjs to safely evaluate the expression
+      const result = evaluate(evalExpression);
+      setExpression(result.toString());
+      setResetExpression(true);
+    } catch (error) {
+      setExpression('Error');
+      setResetExpression(true);
     }
   };
 
