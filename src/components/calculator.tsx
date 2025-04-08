@@ -1,8 +1,8 @@
 'use client' 
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { evaluate } from "mathjs"
-import { useEffect } from "react" 
+import { motion } from "framer-motion" 
 
 export function Calculator() { 
   const [expression, setExpression] = useState('0');
@@ -151,7 +151,12 @@ export function Calculator() {
 
 
   return (
-    <div className="w-96 border rounded-xl bg-muted shadow-xl p-4"> 
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="w-96 border rounded-xl bg-muted shadow-xl p-4"
+    > 
       <div className="bg-white dark:bg-slate-700 p-3 mb-4 rounded-md text-right text-2xl h-16 flex flex-col items-end justify-center border">
           {expression}
       </div>
@@ -323,6 +328,6 @@ export function Calculator() {
         </Button>
 
       </div> 
-    </div> 
+    </motion.div> 
   )
 }
