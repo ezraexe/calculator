@@ -2,10 +2,47 @@
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { evaluate } from "mathjs"
+import { useEffect } from "react" 
 
 export function Calculator() { 
   const [expression, setExpression] = useState('0');
   const [resetExpression, setResetExpression] = useState(false);
+
+  // questions to ask for later: why event.key? 
+  useEffect(() => {
+    const handleKeyDown = (event : KeyboardEvent) => {
+      console.log('Key Pressed: ', event.key); 
+
+      if (/^[0-9]$/.test(event.key)) { 
+        handleDigit(event.key); 
+      } else if (['+', '-'].includes(event.key)) {
+        handleOperator(event.key);
+      } else if (['*', 'x', 'X'].includes(event.key)) { 
+        handleOperator('×');
+      } else if (['/', '÷'].includes(event.key)) { 
+        handleOperator('÷');
+      } else if (event.key === 'Enter' || event.key === '=') {
+        handleEquals(); 
+      } else if (event.key === '.') { 
+        handleDecimal(); 
+      } else if (['Escape', 'Delete', 'c', 'C'].includes(event.key)) { 
+        handleClear(); 
+      } else if (event.key === '(' || event.key === ')') { 
+        handleParentheses(event.key); 
+      } else if (event.key === '%') { 
+        handlePercentage(); 
+      // } else if (event.key === 'Backspace') { 
+      //   handleBackspace();
+      // }
+    }
+  };
+
+  window.addEventListener('keydown', handleKeyDown); 
+
+  return () => { 
+    window.removeEventListener('keydown', handleKeyDown);
+  }; 
+}, [expression, resetExpression]);
 
   const handleClear = () => {
     setExpression('0');
@@ -53,15 +90,13 @@ export function Calculator() {
 
   const handleEquals = () => { 
     try {
-      // Check if the expression contains any operators
+      // boolean to check if the expression contains any operators
       const hasOperation = /[+\-×÷]/.test(expression);
       
       if (!hasOperation) {
-        // If it's just a number, keep it as is
         return;
       }
       
-      // Replace your symbols with ones mathjs understands
       let evalExpression = expression.replace(/×/g, '*').replace(/÷/g, '/');
       
       // Use mathjs to safely evaluate the expression
