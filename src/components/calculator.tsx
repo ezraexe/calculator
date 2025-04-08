@@ -49,6 +49,21 @@ export function Calculator() {
     setResetExpression(false); 
   };
 
+  const handleBackspace = () => { 
+    if (resetExpression) { 
+      setExpression('0'); 
+      setResetExpression(false); 
+    }
+
+    if (expression.length === 1 || expression === 'Error') { 
+      setExpression('0'); 
+    } else if (expression.endsWith(' ')) { 
+      setExpression(expression.slice(0, -3)); 
+    } else { 
+      setExpression(expression.slice(0, -1)); 
+    }
+  }; 
+
   const handleDigit = (digit : string) => { 
     // when we have an answer displayed then press a digit, we reset the expression with the digit 
     if (resetExpression) { 
@@ -134,9 +149,6 @@ export function Calculator() {
       setResetExpression(true); 
     }
   };
-
-  // const handleBackspace = () => {
-  // }
 
 
   return (
