@@ -31,18 +31,17 @@ export function Calculator() {
         handleParentheses(event.key); 
       } else if (event.key === '%') { 
         handlePercentage(); 
-      // } else if (event.key === 'Backspace') { 
-      //   handleBackspace();
-      // }
-    }
-  };
+      } else if (event.key === 'Backspace') { 
+        handleBackspace();
+      }
+    };
 
-  window.addEventListener('keydown', handleKeyDown); 
+    window.addEventListener('keydown', handleKeyDown); 
 
-  return () => { 
-    window.removeEventListener('keydown', handleKeyDown);
-  }; 
-}, [expression, resetExpression]);
+    return () => { 
+      window.removeEventListener('keydown', handleKeyDown);
+    }; 
+  }, [expression, resetExpression]);
 
   const handleClear = () => {
     setExpression('0');
