@@ -41,7 +41,8 @@ export function Calculator() {
     return () => { 
       window.removeEventListener('keydown', handleKeyDown);
     }; 
-  }, [expression, resetExpression]);
+  }, [expression, resetExpression, handleDigit, handleOperator, handleEquals, 
+      handleDecimal, handleClear, handleParentheses, handlePercentage, handleBackspace]);
 
   const handleClear = () => {
     setExpression('0');
@@ -111,13 +112,13 @@ export function Calculator() {
         return;
       }
       
-      let evalExpression = expression.replace(/×/g, '*').replace(/÷/g, '/');
+      const evalExpression = expression.replace(/×/g, '*').replace(/÷/g, '/');
       
       // Use mathjs to safely evaluate the expression
       const result = evaluate(evalExpression);
       setExpression(result.toString());
       setResetExpression(true);
-    } catch (error) {
+    } catch (error: unknown) {
       setExpression('Error');
       setResetExpression(true);
     }
@@ -143,7 +144,7 @@ export function Calculator() {
         parts[parts.length - 1] = percentValue.toString(); 
         setExpression(parts.join(' '));
       }
-    } catch (error) { 
+    } catch (error: unknown) { 
       setExpression('Error'); 
       setResetExpression(true); 
     }
