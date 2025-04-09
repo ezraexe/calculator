@@ -1,4 +1,4 @@
-### Tech Stack 
+## Tech Stack 
 - typescript 
 - next.js
 - react 
@@ -7,5 +7,5 @@
 - tailwind css 
 - mathjs 
 
-### Description 
+## Description 
 made simple calculator with keyboard support, framer motion animations, shadcn components, shadcn dark mode, and mathjs to support all calculations 
