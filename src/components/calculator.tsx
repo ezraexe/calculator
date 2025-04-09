@@ -1,12 +1,122 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 'use client' 
 import { Button } from "@/components/ui/button"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { evaluate } from "mathjs"
 import { motion } from "framer-motion" 
 
 export function Calculator() { 
   const [expression, setExpression] = useState('0');
   const [resetExpression, setResetExpression] = useState(false);
+
+  const handleClear = useCallback(() => {
+    setExpression('0');
+    setResetExpression(false); 
+  }, []);
+
+  const handleBackspace = useCallback(() => { 
+    if (resetExpression) { 
+      setExpression('0'); 
+      setResetExpression(false); 
+    }
+
+    if (expression.length === 1 || expression === 'Error') { 
+      setExpression('0'); 
+    } else if (expression.endsWith(' ')) { 
+      setExpression(expression.slice(0, -3)); 
+    } else { 
+      setExpression(expression.slice(0, -1)); 
+    }
+  }, [expression, resetExpression]); 
+
+  const handleDigit = useCallback((digit : string) => { 
+    // when we have an answer displayed then press a digit, we reset the expression with the digit 
+    if (resetExpression) { 
+      setExpression(digit); 
+      setResetExpression(false);
+    } else { 
+      setExpression(expression === '0' ? digit : expression + digit)
+    }
+    // else we append digit to expression 
+  }, [expression, resetExpression]);
+
+  const handleOperator = useCallback((operator : string) => { 
+    // if we have an expression, we append the operator to the expression 
+
+    // for edge case where we have an answer displayed then press an operator, we reset the expression with the operator 
+    setResetExpression(false); 
+
+    if (['+', '-', '×', '÷'].some(op => expression.endsWith(' ' + op + ' '))) {
+      setExpression(expression.slice(0, -3) + ' ' + operator + ' '); 
+    } else { 
+      setExpression(expression + ' ' + operator + ' ' )
+    }
+  }, [expression]);
+
+  const handleDecimal = useCallback(() => { 
+    if (resetExpression) { 
+      setExpression('0.'); 
+      setResetExpression(false); 
+      return;
+    }
+    
+    const parts = expression.split(' ');
+    const lastPart = parts[parts.length - 1]; 
+
+    if (!lastPart.includes('.')) { 
+      setExpression(expression + '.')
+    }
+  }, [expression, resetExpression]);
+
+  const handleEquals = useCallback(() => { 
+    try {
+      // boolean to check if the expression contains any operators
+      const hasOperation = /[+\-×÷]/.test(expression);
+      
+      if (!hasOperation) {
+        return;
+      }
+      
+      const evalExpression = expression.replace(/×/g, '*').replace(/÷/g, '/');
+      
+      // Use mathjs to safely evaluate the expression
+      const result = evaluate(evalExpression);
+      setExpression(result.toString());
+      setResetExpression(true);
+    } catch (error: unknown) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      setExpression('Error');
+      setResetExpression(true);
+    }
+  }, [expression]);
+
+  const handleParentheses = useCallback((parenthesis : string) => {
+    // when we have an answer displayed then press a parenthesis, we reset the expression with the parenthesis 
+    if (resetExpression) { 
+      setExpression(parenthesis); 
+      setResetExpression(false);
+    } else { 
+      setExpression(expression === '0' ? parenthesis : expression + parenthesis); 
+    }
+  }, [expression, resetExpression]);
+
+  const handlePercentage = useCallback(() => { 
+    try { 
+      const parts = expression.split(' '); 
+      const lastPart = parts[parts.length - 1]; 
+
+      if (!isNaN(parseFloat(lastPart))) { 
+        const percentValue = parseFloat(lastPart) / 100; 
+        parts[parts.length - 1] = percentValue.toString(); 
+        setExpression(parts.join(' '));
+      }
+    } catch (_error: unknown) { 
+      // Error is caught but not used
+      setExpression('Error'); 
+      setResetExpression(true); 
+    }
+  }, [expression]);
 
   // questions to ask for later: why event.key? 
   useEffect(() => {
@@ -41,115 +151,8 @@ export function Calculator() {
     return () => { 
       window.removeEventListener('keydown', handleKeyDown);
     }; 
-  }, [expression, resetExpression, handleDigit, handleOperator, handleEquals, 
-      handleDecimal, handleClear, handleParentheses, handlePercentage, handleBackspace]);
-
-  const handleClear = () => {
-    setExpression('0');
-    setResetExpression(false); 
-  };
-
-  const handleBackspace = () => { 
-    if (resetExpression) { 
-      setExpression('0'); 
-      setResetExpression(false); 
-    }
-
-    if (expression.length === 1 || expression === 'Error') { 
-      setExpression('0'); 
-    } else if (expression.endsWith(' ')) { 
-      setExpression(expression.slice(0, -3)); 
-    } else { 
-      setExpression(expression.slice(0, -1)); 
-    }
-  }; 
-
-  const handleDigit = (digit : string) => { 
-    // when we have an answer displayed then press a digit, we reset the expression with the digit 
-    if (resetExpression) { 
-      setExpression(digit); 
-      setResetExpression(false);
-    } else { 
-      setExpression(expression === '0' ? digit : expression + digit)
-    }
-    // else we append digit to expression 
-  };
-
-  const handleOperator = (operator : string) => { 
-    // if we have an expression, we append the operator to the expression 
-
-    // for edge case where we have an answer displayed then press an operator, we reset the expression with the operator 
-    setResetExpression(false); 
-
-    if (['+', '-', '×', '÷'].some(op => expression.endsWith(' ' + op + ' '))) {
-      setExpression(expression.slice(0, -3) + ' ' + operator + ' '); 
-    } else { 
-      setExpression(expression + ' ' + operator + ' ' )
-    }
-  };
-
-  const handleDecimal = () => { 
-    if (resetExpression) { 
-      setExpression('0.'); 
-      setResetExpression(false); 
-      return;
-    }
-    
-    const parts = expression.split(' ');
-    const lastPart = parts[parts.length - 1]; 
-
-    if (!lastPart.includes('.')) { 
-      setExpression(expression + '.')
-    }
-  };
-
-  const handleEquals = () => { 
-    try {
-      // boolean to check if the expression contains any operators
-      const hasOperation = /[+\-×÷]/.test(expression);
-      
-      if (!hasOperation) {
-        return;
-      }
-      
-      const evalExpression = expression.replace(/×/g, '*').replace(/÷/g, '/');
-      
-      // Use mathjs to safely evaluate the expression
-      const result = evaluate(evalExpression);
-      setExpression(result.toString());
-      setResetExpression(true);
-    } catch (error: unknown) {
-      setExpression('Error');
-      setResetExpression(true);
-    }
-  };
-
-  const handleParentheses = (parenthesis : string) => {
-    // when we have an answer displayed then press a parenthesis, we reset the expression with the parenthesis 
-    if (resetExpression) { 
-      setExpression(parenthesis); 
-      setResetExpression(false);
-    } else { 
-      setExpression(expression === '0' ? parenthesis : expression + parenthesis); 
-    }
-  };
-
-  const handlePercentage = () => { 
-    try { 
-      const parts = expression.split(' '); 
-      const lastPart = parts[parts.length - 1]; 
-
-      if (!isNaN(parseFloat(lastPart))) { 
-        const percentValue = parseFloat(lastPart) / 100; 
-        parts[parts.length - 1] = percentValue.toString(); 
-        setExpression(parts.join(' '));
-      }
-    } catch (error: unknown) { 
-      setExpression('Error'); 
-      setResetExpression(true); 
-    }
-  };
-
+  }, [handleDigit, handleOperator, handleEquals, handleDecimal, handleClear, 
+      handleParentheses, handlePercentage, handleBackspace]);
 
   return (
     <motion.div 

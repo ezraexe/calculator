@@ -34,7 +34,7 @@ export default function Home() {
             transition={{ delay: .3, duration: .5 }}
             className="text-3xl font-bold mb-8"
           >
-            Ezra&apos;s Calculator
+            Ezra's Calculator
           </motion.h1>
 
           <motion.div
