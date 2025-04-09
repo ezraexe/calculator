@@ -9,3 +9,5 @@
 
 ## Description 
 made simple calculator with keyboard support, framer motion animations, shadcn components, shadcn dark mode, and mathjs to support all calculations 
+
+[Calculator Link](https://calculator-nine-puce.vercel.app/)
